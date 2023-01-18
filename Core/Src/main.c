@@ -56,14 +56,16 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 __IO uint8_t ubButtonPress = 0;
-__IO uint8_t index_v = 0;
-const uint8_t NUM_OF_FLASHING_PERIODS = 3;
-__IO uint16_t period_ms[] = {111, 333, 999};
+__IO uint8_t index_v = 1;
+__IO uint8_t stop = 0;
+const uint8_t NUM_OF_FLASHING_PERIODS = 4;
+__IO uint16_t period_ms[] = {100, 200, 400, 800};
 void user_button_callback(void)
 {
   /* Update button press variable : to be checked in waiting loop in main program */
-  index_v += 1;
-  index_v = index_v % NUM_OF_FLASHING_PERIODS;
+  // index_v += 1;
+  // index_v = index_v % NUM_OF_FLASHING_PERIODS;
+  stop ^= 1;
 }
 /* USER CODE END 0 */
 
@@ -106,15 +108,42 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+/* 
     LL_GPIO_TogglePin(GPIOC, LL_GPIO_PIN_7);
-	  HAL_Delay(period_ms[index_v]);
+    HAL_Delay(period_ms[index_v]);
     LL_GPIO_TogglePin(GPIOC, LL_GPIO_PIN_7);
-	  LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_7);
-	  HAL_Delay(period_ms[index_v]);
     LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_7);
-	  LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_14);
-	  HAL_Delay(period_ms[index_v]);
+    HAL_Delay(period_ms[index_v]);
+    LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_7);
     LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_14);
+    HAL_Delay(period_ms[index_v]);
+    LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_14);
+     */
+    LL_GPIO_TogglePin(GPIOC, LL_GPIO_PIN_7);
+    HAL_Delay(period_ms[index_v]);
+    while (stop) {
+      HAL_Delay(period_ms[index_v]);
+    }
+
+    LL_GPIO_TogglePin(GPIOC, LL_GPIO_PIN_7);
+    LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_7);
+    HAL_Delay(period_ms[index_v]);
+    while (stop) {
+      HAL_Delay(period_ms[index_v]);
+    }
+
+    LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_7);
+    LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_14);
+    HAL_Delay(period_ms[index_v]);
+    while (stop) {
+      HAL_Delay(period_ms[index_v]);
+    }
+
+    LL_GPIO_TogglePin(GPIOB, LL_GPIO_PIN_14);
+    // HAL_Delay(period_ms[index_v]);
+    // while (stop) {
+    //   HAL_Delay(period_ms[index_v]);
+    // }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
